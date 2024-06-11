@@ -1,6 +1,6 @@
 const FabricClient = require('./lib/fabric-client');
-const AdminController = require('./controller/admin');
-const AdminService = require('./service/admin');
+const PaymentProviderController = require('./controller/payment-provider');
+const PaymentProviderService = require('./service/payment-provider');
 
 class Init {
     constructor(app) {
@@ -8,9 +8,9 @@ class Init {
 
         this.FabricClient = new FabricClient();
 
-        this.AdminService = new AdminService(this.FabricClient);
+        this.PaymentProviderService = new PaymentProviderService(this.FabricClient);
 
-        this.AdminController = new AdminController(this.AdminService);
+        this.PaymentProviderController = new PaymentProviderController(this.PaymentProviderService);
     }
 
     async setupService() {
@@ -22,11 +22,11 @@ class Init {
         this.app.get(
             '/healthcheck',
             (_, res) => {
-                res.status(200).send('Admin Dapps is healthy! ');
+                res.status(200).send('Payment Provider Dapps is healthy! ');
             },
         );
 
-        this.app.use('/admin', this.AdminController.getRouter());
+        this.app.use('/payment-provider', this.PaymentProviderController.getRouter());
     }
 }
 

@@ -2,6 +2,7 @@ const { Gateway, Wallets } = require('fabric-network');
 const FabricCAClient = require('fabric-ca-client');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
 const CertAuthUtil = require('../util/cert-authority');
 
@@ -46,12 +47,37 @@ class FabricClient {
         this.network = await this.gateway.getNetwork(this.channelName);
 
         logger.info('Connected to Fabric gateway');
+
+        logger.info('Creating Payment Channel');
+        this.paymentChannelId = await this.createPaymentChannel();
+        logger.info('Payment Channel created');
     }
 
     async getAttributes() {
         const contract = this.network.getContract(CHAINCODES.MERCHANT_ATTR);
         const result = await contract.submitTransaction('getAttributesList');
         return JSON.parse(result.toString());
+    }
+
+    async createPaymentChannel() {
+        const uuid = uuidv4();
+        const date = new Date().toISOString();
+
+        const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
+        const result = await contract.submitTransaction('createPaymentChannel', 'payment-provider1', uuid, date);
+        return result.toString();
+    }
+
+    async fetchChannelData() {
+        const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
+        const result = await contract.submitTransaction('fetchChannelData', this.paymentChannelId);
+        return JSON.parse(result.toString());
+    }
+
+    async upsertChannelPolicy(policyName, policyValue, operator) {
+        const date = new Date().toISOString();
+        const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
+        await contract.submitTransaction('upsertChannelPolicy', this.paymentChannelId, policyName, policyValue, operator, date);
     }
 }
 
