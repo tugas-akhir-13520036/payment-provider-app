@@ -22,6 +22,12 @@ class AdminService {
         const res = await this.fabricClient.upsertChannelPolicy(policyName, policyValue, operator);
         return res;
     }
+
+    async fetchHistory() {
+        logger.info('Fetching history');
+        const res = await this.fabricClient.fetchHistory();
+        return res;
+    }
 }
 
 module.exports = AdminService;

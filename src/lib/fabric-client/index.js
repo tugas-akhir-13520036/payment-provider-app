@@ -79,6 +79,12 @@ class FabricClient {
         const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
         await contract.submitTransaction('upsertChannelPolicy', this.paymentChannelId, policyName, policyValue, operator, date);
     }
+
+    async fetchHistory() {
+        const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
+        const result = await contract.evaluateTransaction('queryHistory', this.paymentChannelId);
+        return JSON.parse(result.toString());
+    }
 }
 
 module.exports = FabricClient;
