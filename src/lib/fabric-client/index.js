@@ -49,7 +49,8 @@ class FabricClient {
         logger.info('Connected to Fabric gateway');
 
         logger.info('Creating Payment Channel');
-        this.paymentChannelId = await this.createPaymentChannel();
+        this.paymentChannelId = orgConfig.userId || `payment_provider-${uuidv4()}`;
+        await this.createPaymentChannel();
         logger.info('Payment Channel created');
     }
 
@@ -60,11 +61,10 @@ class FabricClient {
     }
 
     async createPaymentChannel() {
-        const uuid = uuidv4();
         const date = new Date().toISOString();
 
         const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
-        const result = await contract.submitTransaction('createPaymentChannel', 'payment-provider1', uuid, date);
+        const result = await contract.submitTransaction('createPaymentChannel', 'payment-provider1', this.paymentChannelId, date);
         return result.toString();
     }
 
