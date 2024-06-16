@@ -70,7 +70,7 @@ class FabricClient {
 
     async fetchChannelData() {
         const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
-        const result = await contract.submitTransaction('fetchChannelData', this.paymentChannelId);
+        const result = await contract.submitTransaction('fetchOwnChannelData', this.paymentChannelId);
         return JSON.parse(result.toString());
     }
 
@@ -88,7 +88,7 @@ class FabricClient {
 
     async fetchHistory() {
         const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
-        const result = await contract.evaluateTransaction('queryHistory', this.paymentChannelId);
+        const result = await contract.evaluateTransaction('queryOwnHistory', this.paymentChannelId);
         return JSON.parse(result.toString());
     }
 }
