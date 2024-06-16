@@ -13,6 +13,7 @@ class PaymentProviderController {
         this.router.get('/channel-data', handleAsync(this.fetchChannelData.bind(this)));
         this.router.post('/channel-policy', handleAsync(this.upsertChannelPolicy.bind(this)));
         this.router.get('/history', handleAsync(this.fetchHistory.bind(this)));
+        this.router.delete('/channel-policy', handleAsync(this.deleteChannelPolicy.bind(this)));
     }
 
     getRouter() {
@@ -38,6 +39,12 @@ class PaymentProviderController {
     async fetchHistory(req, res) {
         const history = await this.paymentProviderService.fetchHistory();
         return res.status(200).json(history);
+    }
+
+    async deleteChannelPolicy(req, res) {
+        const { policyName } = req.body;
+        await this.paymentProviderService.deleteChannelPolicy(policyName);
+        return res.status(200).json({ message: 'Channel policy deleted successfully' });
     }
 }
 

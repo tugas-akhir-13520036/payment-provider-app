@@ -77,7 +77,13 @@ class FabricClient {
     async upsertChannelPolicy(policyName, policyValue, operator) {
         const date = new Date().toISOString();
         const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
-        await contract.submitTransaction('upsertChannelPolicy', this.paymentChannelId, policyName, policyValue, operator, date);
+        await contract.submitTransaction('upsertChannelPolicy', policyName, policyValue, operator, date);
+    }
+
+    async deleteChannelPolicy(policyName) {
+        const date = new Date().toISOString();
+        const contract = this.network.getContract(CHAINCODES.CHANNEL_POLICY);
+        await contract.submitTransaction('deleteChannelPolicy', policyName, date);
     }
 
     async fetchHistory() {

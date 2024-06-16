@@ -28,6 +28,12 @@ class AdminService {
         const res = await this.fabricClient.fetchHistory();
         return res;
     }
+
+    async deleteChannelPolicy(policyName) {
+        logger.info('Deleting channel policy');
+        const res = await this.fabricClient.deleteChannelPolicy(policyName);
+        return res;
+    }
 }
 
 module.exports = AdminService;
