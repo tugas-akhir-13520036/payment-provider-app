@@ -10,7 +10,7 @@ class PaymentProviderController {
 
     initRouter() {
         this.router.get('/attributes', handleAsync(this.getAttributeList.bind(this)));
-        this.router.get('/channel-data', handleAsync(this.fetchChannelData.bind(this)));
+        this.router.get('/', handleAsync(this.fetchChannelData.bind(this)));
         this.router.post('/channel-policy', handleAsync(this.upsertChannelPolicy.bind(this)));
         this.router.get('/history', handleAsync(this.fetchHistory.bind(this)));
         this.router.delete('/channel-policy', handleAsync(this.deleteChannelPolicy.bind(this)));
